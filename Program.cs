@@ -1,9 +1,15 @@
 ﻿using System;
 
-namespace SellerManagement 
+namespace SellerManagement
 {
     internal class Program
     {
+        static string sName = "";
+        static string bDay = "";
+        static string emailAdd = "";
+        static string phoneNum = "";
+        static string preAdd = "";
+        static string gender = "";
         static void Main(string[] args)
         {
             Console.WriteLine("SHOPEE ACCOUNT MANAGEMENT");
@@ -11,84 +17,199 @@ namespace SellerManagement
 
             char choose;
 
+            bool shop = true;
+            while (shop)
+            {
+
+                chooseNum();
+                choose = Console.ReadKey().KeyChar;
+                Console.WriteLine();
+
+
+                switch (choose)
+                {
+                    case '1':
+                        createAcc();
+                        break;
+
+                    case '2':
+                        searchAcc();
+                        break;
+
+                    case '3':
+                        updateInfo();
+                        break;
+
+                    case '4':
+                        deleteAcc();
+                        break;
+
+                    case '5':
+                        Console.WriteLine("Exit.");
+                        shop = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid input. Select an option.");
+                        break;
+                }
+            }
+        }
+
+        static void chooseNum()
+        {
+
             Console.WriteLine("\nACCOUNT & SECURITY");
             Console.Write("1. Create account.\n2. Search name \n3. Update information.\n4. Delete your account\n5. Exit\n");
+            Console.WriteLine("\n--------------------------------------------------------");
+            Console.Write("\nChoose: ");
+        }
 
-            choose = Console.ReadKey().KeyChar;
-            Console.WriteLine();
+        static void createAcc()
+        {
+            Console.WriteLine("\nADD ACCOUNT");
 
-            switch (choose)
+            Console.Write("\nEnter Seller Name: ");
+            sName = Console.ReadLine();
+
+            Console.Write("Enter birthday: (MM/DD/YY): ");
+            bDay = Console.ReadLine();
+
+            Console.Write("Enter email address: ");
+            emailAdd = Console.ReadLine();
+
+            Console.Write("Enter phone number: ");
+            phoneNum = Console.ReadLine();
+
+            Console.Write("Enter present address: ");
+            preAdd = Console.ReadLine();
+
+            Console.WriteLine("\nReview your details: ");
+            Console.WriteLine("Name: " + sName);
+            Console.WriteLine("Birthday: " + bDay);
+            Console.WriteLine("Email Address: " + emailAdd);
+            Console.WriteLine("Phone Number: " + phoneNum);
+            Console.WriteLine("Present Address: " + preAdd);
+
+            Console.Write("\nSave this account? (Yes/No): ");
+            string confirm = Console.ReadLine().ToLower();
+
+            if (confirm == "yes")
             {
-                case '1':
-                    Console.WriteLine("ADD ACCOUNT");
+                Console.WriteLine("\nCreated Successfully.");
+            }
+            else
+            {
+                Console.WriteLine("\nAccount not saved.");
+                sName = bDay = emailAdd = phoneNum = preAdd = "";
+            }
+        }
 
-                    Console.WriteLine("\nEnter Seller Name: ");
-                    string name = Console.ReadLine();
+        static void searchAcc()
+        {
+            Console.WriteLine("\nSEARCH ACCOUNT");
 
-                    Console.WriteLine("Enter email address: ");
-                    string emailAdd = Console.ReadLine();
+            if (string.IsNullOrEmpty(sName))
+            {
+                Console.WriteLine("No Account Created Yet. ");
+                return;
+            }
 
-                    Console.WriteLine("Enter phone number: ");
-                    string phoneNum = Console.ReadLine();
+            Console.Write("\nEnter name to search: ");
+            string searchName = Console.ReadLine();
 
-                    Console.WriteLine("Enter present address: ");
-                    string preAdd = Console.ReadLine();
+            Console.WriteLine("Searching account...");
 
-                    Console.WriteLine("\nCreated Successfully.");
+            if (searchName.Trim().ToLower() == sName.Trim().ToLower())
+            {
+                Console.WriteLine("Username Found!");
+            }
+            else
+            {
+                Console.WriteLine("Username not found.");
+            }
+        }
 
-                    break;
+        static void updateInfo()
+        {
 
-                case '2':
-                    Console.WriteLine("\nSEARCH ACCOUNT");
+            Console.WriteLine("\nUPDATE INFORMATION");
 
-                    Console.WriteLine("Enter...");
-                    string searchName = Console.ReadLine();
+            if (string.IsNullOrEmpty(sName))
+            {
+                Console.WriteLine("No Account Created Yet. ");
+                return;
+            }
 
-                    Console.WriteLine("Searching account...");
+            Console.Write("\nMy Profile");
 
-                    break;
+            Console.Write("\nName: ");
+            sName = Console.ReadLine();
 
-                case '3':
-                    Console.WriteLine("UPDATE INFORMATION");
+            Console.Write("Username: ");
+            string uName = Console.ReadLine();
 
-                    Console.WriteLine("\nMy Profile");
-                    Console.WriteLine("\nName: ");
-                    Console.WriteLine("Username: ");
-                    Console.WriteLine("Bio: ");
-                    Console.WriteLine("Gender");
-                    Console.WriteLine("Birthday: ");
-                    Console.WriteLine("Phone: ");
-                    Console.WriteLine("Email: ");
-                    break;
+            Console.Write("Bio: ");
+            string bio = Console.ReadLine();
 
-                case '4':
+            Console.Write("Phone: ");
+            phoneNum = Console.ReadLine();
+
+            Console.Write("Email: ");
+            emailAdd = Console.ReadLine();
+
+
+            Console.WriteLine("\nReview update information");
+            Console.WriteLine("Name: " + sName);
+            Console.WriteLine("Username: " + uName);
+            Console.WriteLine("Bio: " + bio);
+            Console.WriteLine("Phone: " + phoneNum);
+            Console.WriteLine("Email: " + emailAdd);
+
+            Console.Write("\nSave this info? (Yes/No): ");
+            string info = Console.ReadLine().ToLower();
+
+            if (info == "yes")
+            {
+                Console.WriteLine("\nCreated Successfully.");
+            }
+            else
+            {
+                Console.WriteLine("\nAccount not saved.");
+            }
+        }
+
+                static void deleteAcc()
+                {
                     Console.WriteLine("REQUEST ACCOUNT DELETION");
 
-                    Console.WriteLine("Do you want to delete your account (Yes/No): ");
+                    if (string.IsNullOrEmpty(sName))
+                    {
+                        Console.WriteLine("No Account Created Yet.");
+                        return;
+                    }
+
+                    Console.WriteLine("\nDo you want to delete your account (" + sName + ") (Yes/No): ");
 
                     string ans = Console.ReadLine().ToLower();
 
-                    if(ans == "yes")
+                    if (ans == "yes")
                     {
                         Console.WriteLine("Please Note. Account Deletion is Irreversable");
                         Console.WriteLine("Proceed to Delete. Deleting...");
-                    }else if (ans == "no"){
+                        Console.WriteLine("DELETED SUCCESSFULLY");
+
+                        sName = bDay = emailAdd = phoneNum = preAdd = "";
+                    }
+                    else if (ans == "no")
+                    {
                         Console.WriteLine("Cancelled Account Deletion");
-                    }else
+                    }
+                    else
                     {
                         Console.WriteLine("Invalid Input");
                     }
-
-                    break;
-
-                case '5':
-                    Console.WriteLine("Exit.");
-                    break;
-
-                default:
-                    Console.WriteLine("Invalid input. Select an option.");
-                    break;
+                }
             }
         }
-    }
-}
+    
