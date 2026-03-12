@@ -7,4 +7,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SellerManagementAppService\SellerManagementAppService.csproj" />
+    <ProjectReference Include="..\SellerManagementDataService\SellerManagementDataService.csproj" />
+    <ProjectReference Include="..\SellerManagementModels\SellerManagementModels.csproj" />
+  </ItemGroup>
+
 </Project>

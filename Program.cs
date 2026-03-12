@@ -179,37 +179,36 @@ namespace SellerManagement
             }
         }
 
-                static void deleteAcc()
-                {
-                    Console.WriteLine("REQUEST ACCOUNT DELETION");
+        static void deleteAcc()
+        {
+            Console.WriteLine("REQUEST ACCOUNT DELETION");
 
-                    if (string.IsNullOrEmpty(sName))
-                    {
-                        Console.WriteLine("No Account Created Yet.");
-                        return;
-                    }
+            if (string.IsNullOrEmpty(sName))
+            {
+                Console.WriteLine("No Account Created Yet.");
+                return;
+            }
 
-                    Console.WriteLine("\nDo you want to delete your account (" + sName + ") (Yes/No): ");
+            Console.WriteLine("\nDo you want to delete your account (" + sName + ") (Yes/No): ");
 
-                    string ans = Console.ReadLine().ToLower();
+            string ans = Console.ReadLine().ToLower();
 
-                    if (ans == "yes")
-                    {
-                        Console.WriteLine("Please Note. Account Deletion is Irreversable");
-                        Console.WriteLine("Proceed to Delete. Deleting...");
-                        Console.WriteLine("DELETED SUCCESSFULLY");
+            if (ans == "yes")
+            {
+                Console.WriteLine("Please Note. Account Deletion is Irreversable");
+                Console.WriteLine("Proceed to Delete. Deleting...");
+                Console.WriteLine("DELETED SUCCESSFULLY");
 
-                        sName = bDay = emailAdd = phoneNum = preAdd = "";
-                    }
-                    else if (ans == "no")
-                    {
-                        Console.WriteLine("Cancelled Account Deletion");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid Input");
-                    }
-                }
+                sName = bDay = emailAdd = phoneNum = preAdd = "";
+            }
+            else if (ans == "no")
+            {
+                Console.WriteLine("Cancelled Account Deletion");
+            }
+            else
+            {
+                Console.WriteLine("Invalid Input");
             }
         }
-    
+    }
+}
