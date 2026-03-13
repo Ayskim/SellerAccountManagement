@@ -1,6 +1,6 @@
 ﻿using System;
-using SellerAccountModels;
-using SellerAccountAppService;
+using SellerManagementModels;
+using SellerManagementAppService;
 
 namespace SellerManagement
 {

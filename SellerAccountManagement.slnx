@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="SellerAccount/SellerManagement.csproj" />
+  <Project Path="SellerManagementAppService/SellerManagementAppService.csproj" Id="4461348c-641d-4fb1-aa03-ef7fec90d74b" />
+  <Project Path="SellerManagementDataService/SellerManagementDataService.csproj" Id="777f7940-7c12-4ed4-bfa6-74a10f4d7168" />
+  <Project Path="SellerManagementModels/SellerManagementModels.csproj" Id="3b2bca2e-df70-487e-9c22-8f8f99bdd8dd" />
+</Solution>
