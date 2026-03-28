@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using SellerManagementDataService;
 using SellerManagementModels;
 
@@ -8,35 +6,56 @@ namespace SellerManagementAppService
 {
     public class SellerAppService
     {
-        SellerDataService dataLogic = new SellerDataService();
+        private SellerJsonData jsonDataService = new SellerJsonData();
+        private SellersDBData dbDataService = new SellersDBData();
 
-        public void CreateAccount(SellerModels data)
+        public bool CreateAccount(SellerModels data)
         {
             if (string.IsNullOrEmpty(data.SellerName))
-                return;
+                return false;
 
-            dataLogic.Create(data);
+            if (jsonDataService.GetAccounts().Exists(x => x.Username == data.Username))
+                return false;
+
+            jsonDataService.Add(data);
+            dbDataService.Add(data);
+
+            return true;
         }
 
-        public SellerModels SearchAccount(string name)
+        public SellerModels? SearchAccount(string input)
         {
-            return dataLogic.Search(name);
+            var seller = jsonDataService.Search(input);
+            if (seller == null)
+                seller = dbDataService.Search(input);
+
+            return seller;
         }
 
         public void UpdateAccount(SellerModels data)
         {
-            dataLogic.Update(data);
+            jsonDataService.Update(data);
+            dbDataService.Update(data);
         }
 
-        public void DeleteAccount()
+        public void Delete(string username)
         {
-            dataLogic.Delete();
+            jsonDataService.Delete(username);
+            dbDataService.Delete(username);
         }
 
-        public SellerModels GetAccount()
+        public List<SellerModels> GetAccounts()
         {
-            return dataLogic.Get();
+            var list = jsonDataService.GetAccounts();
+            var dbList = dbDataService.GetAccounts();
+
+            foreach (var s in dbList)
+            {
+                if (!list.Exists(x => x.Username == s.Username))
+                    list.Add(s);
+            }
+
+            return list;
         }
     }
 }
-

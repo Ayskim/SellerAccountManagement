@@ -54,11 +54,11 @@ namespace SellerManagement
         static void chooseNum()
         {
             Console.WriteLine("\nACCOUNT & SECURITY");
-            Console.WriteLine("1. Create account");
-            Console.WriteLine("2. Search name");
-            Console.WriteLine("3. Update information");
-            Console.WriteLine("4. Delete your account");
-            Console.WriteLine("5. Exit");
+            Console.WriteLine("[1]. Create account");
+            Console.WriteLine("[2]. Search account");
+            Console.WriteLine("[3]. Update information");
+            Console.WriteLine("[4]. Delete your account");
+            Console.WriteLine("[5]. Exit");
             Console.WriteLine("\n--------------------------------------------------------");
             Console.Write("Choose: ");
         }
@@ -72,6 +72,9 @@ namespace SellerManagement
             Console.Write("Enter Seller Name: ");
             acc.SellerName = Console.ReadLine();
 
+            Console.Write("Enter Username: ");
+            acc.Username = Console.ReadLine();
+
             Console.Write("Enter birthday (MM/DD/YY): ");
             acc.Birthday = Console.ReadLine();
 
@@ -84,12 +87,17 @@ namespace SellerManagement
             Console.Write("Enter present address: ");
             acc.PresentAddress = Console.ReadLine();
 
+            Console.Write("Enter Bio: ");
+            acc.Bio = Console.ReadLine();
+
             Console.WriteLine("\nReview your details:");
             Console.WriteLine("Name: " + acc.SellerName);
+            Console.WriteLine("Username: " + acc.Username);
             Console.WriteLine("Birthday: " + acc.Birthday);
             Console.WriteLine("Email Address: " + acc.EmailAddress);
             Console.WriteLine("Phone Number: " + acc.PhoneNumber);
             Console.WriteLine("Present Address: " + acc.PresentAddress);
+            Console.WriteLine("Bio: " + acc.Bio);
 
             Console.Write("\nSave this account? (Yes/No): ");
             string confirm = Console.ReadLine().ToLower();
@@ -98,10 +106,12 @@ namespace SellerManagement
             {
                 service.CreateAccount(acc);
                 Console.WriteLine("\nCreated Successfully.");
+                Console.WriteLine("\n--------------------------------------------------------");
             }
             else
             {
                 Console.WriteLine("\nAccount not saved.");
+                Console.WriteLine("\n--------------------------------------------------------");
             }
         }
 
@@ -109,23 +119,27 @@ namespace SellerManagement
         {
             Console.WriteLine("\nSEARCH ACCOUNT");
 
-            Console.Write("\nEnter name to search: ");
-            string name = Console.ReadLine();
+            Console.Write("\nEnter username to search: ");
+            string username = Console.ReadLine();
 
-            SellerModels acc = service.SearchAccount(name);
+            SellerModels acc = service.SearchAccount(username);
 
             if (acc != null)
             {
-                Console.WriteLine("\nUsername Found!");
+                Console.WriteLine("\nAccount Found!");
                 Console.WriteLine("Name: " + acc.SellerName);
+                Console.WriteLine("Username: " + acc.Username);
                 Console.WriteLine("Birthday: " + acc.Birthday);
                 Console.WriteLine("Email: " + acc.EmailAddress);
                 Console.WriteLine("Phone: " + acc.PhoneNumber);
                 Console.WriteLine("Address: " + acc.PresentAddress);
+                Console.WriteLine("Bio: " + acc.Bio);
+                Console.WriteLine("\n--------------------------------------------------------");
             }
             else
             {
                 Console.WriteLine("Username not found.");
+                Console.WriteLine("\n--------------------------------------------------------");
             }
         }
 
@@ -135,11 +149,11 @@ namespace SellerManagement
 
             SellerModels acc = new SellerModels();
 
-            Console.Write("\nName: ");
-            acc.SellerName = Console.ReadLine();
-
-            Console.Write("Username: ");
+            Console.Write("\nEnter Username (to update): ");
             acc.Username = Console.ReadLine();
+
+            Console.Write("Name: ");
+            acc.SellerName = Console.ReadLine();
 
             Console.Write("Bio: ");
             acc.Bio = Console.ReadLine();
@@ -150,12 +164,11 @@ namespace SellerManagement
             Console.Write("Email: ");
             acc.EmailAddress = Console.ReadLine();
 
-            Console.WriteLine("\nReview update information");
-            Console.WriteLine("Name: " + acc.SellerName);
-            Console.WriteLine("Username: " + acc.Username);
-            Console.WriteLine("Bio: " + acc.Bio);
-            Console.WriteLine("Phone: " + acc.PhoneNumber);
-            Console.WriteLine("Email: " + acc.EmailAddress);
+            Console.Write("Address: ");
+            acc.PresentAddress = Console.ReadLine();
+
+            Console.Write("Birthday: ");
+            acc.Birthday = Console.ReadLine();
 
             Console.Write("\nSave this info? (Yes/No): ");
             string confirm = Console.ReadLine().ToLower();
@@ -163,11 +176,13 @@ namespace SellerManagement
             if (confirm == "yes")
             {
                 service.UpdateAccount(acc);
-                Console.WriteLine("Information Updated Successfully.");
+                Console.WriteLine("\nInformation Updated Successfully.");
+                Console.WriteLine("\n--------------------------------------------------------");
             }
             else
             {
                 Console.WriteLine("Update cancelled.");
+                Console.WriteLine("\n--------------------------------------------------------");
             }
         }
 
@@ -175,18 +190,22 @@ namespace SellerManagement
         {
             Console.WriteLine("\nREQUEST ACCOUNT DELETION");
 
-            Console.WriteLine("\nDo you want to delete your account? (Yes/No)");
+            Console.Write("Enter Username to delete: ");
+            string username = Console.ReadLine();
 
+            Console.Write("Are you sure? (Yes/No): ");
             string ans = Console.ReadLine().ToLower();
 
             if (ans == "yes")
             {
-                service.DeleteAccount();
-                Console.WriteLine("DELETED SUCCESSFULLY");
+                service.Delete(username);
+                Console.WriteLine("\nDELETED SUCCESSFULLY");
+                Console.WriteLine("\n--------------------------------------------------------");
             }
             else
             {
-                Console.WriteLine("Cancelled Account Deletion");
+                Console.WriteLine("\nCancelled Account Deletion");
+                Console.WriteLine("\n--------------------------------------------------------");
             }
         }
     }

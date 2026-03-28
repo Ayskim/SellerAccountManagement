@@ -1,43 +1,80 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.IO;
+using System.Text.Json;
 using SellerManagementModels;
 
 namespace SellerManagementDataService
 {
-    public class SellerDataService
+    public class SellerJsonData
     {
-        private SellerModels seller = new SellerModels();
+        private string filePath = "sellers.json";
+        private SellersDBData db = new SellersDBData();
 
-        public void Create(SellerModels data)
+        public void Added(SellerModels seller)
         {
-            seller = data;
+            var list = GetAll();
+            if (!list.Exists(x => x.Username == seller.Username))
+            {
+                list.Add(seller);
+                Save(list);
+            }
+            db.Add(seller);
         }
 
-        public SellerModels Get()
+        public SellerModels? Search(string username)
         {
+            var list = GetAll();
+            var seller = list.Find(x => x.Username == username);
+            if (seller == null)
+                seller = db.Search(username);
             return seller;
         }
 
-        public SellerModels Search(string name)
+        public void Update(SellerModels seller)
         {
-            if (seller != null && seller.SellerName != null &&
-                seller.SellerName.Trim().ToLower() == name.Trim().ToLower())
+            var list = GetAll();
+            var index = list.FindIndex(x => x.Username == seller.Username);
+            if (index != -1)
             {
-                return seller;
+                list[index] = seller;
+                Save(list);
             }
-
-            return null; 
+            db.Update(seller);
         }
 
-        public void Update(SellerModels data)
+        public void Delete(string username)
         {
-            seller = data;
+            var list = GetAll();
+            list.RemoveAll(x => x.Username == username);
+            Save(list);
+            db.Delete(username);
         }
 
-        public void Delete()
+        public List<SellerModels> GetAccounts()
         {
-            seller = new SellerModels();
+            var jsonList = GetAll();
+            var dbList = db.GetAccounts();
+            foreach (var s in dbList)
+            {
+                if (!jsonList.Exists(x => x.Username == s.Username))
+                    jsonList.Add(s);
+            }
+            return jsonList;
+        }
+
+        private List<SellerModels> GetAll()
+        {
+            if (!File.Exists(filePath))
+                return new List<SellerModels>();
+            var json = File.ReadAllText(filePath);
+            return JsonSerializer.Deserialize<List<SellerModels>>(json) ?? new List<SellerModels>();
+        }
+
+        private void Save(List<SellerModels> list)
+        {
+            var json = JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(filePath, json);
         }
     }
 }
