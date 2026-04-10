@@ -274,8 +274,6 @@ namespace SellerManagement
             {
                 Console.WriteLine($"Name: {acc.SellerName}");
                 Console.WriteLine($"Username: {acc.Username}");
-                Console.WriteLine($"Email: {acc.EmailAddress}");
-                Console.WriteLine($"Phone: {acc.PhoneNumber}");
                 Console.WriteLine("--------------------------------------------------------");
             }
         }
