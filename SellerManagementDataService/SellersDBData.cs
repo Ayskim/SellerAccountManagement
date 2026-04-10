@@ -4,7 +4,7 @@ using SellerManagementModels;
 
 namespace SellerManagementDataService
 {
-    public class SellersDBData
+    public class SellersDBData : ISellerDataService
     {
         private string connectionString =
             "Data Source=localhost\\SQLEXPRESS;Initial Catalog=SellerMngmt;Integrated Security=True;TrustServerCertificate=True;";
@@ -15,7 +15,7 @@ namespace SellerManagementDataService
             sqlConnection = new SqlConnection(connectionString);
         }
 
-        public void Add(SellerModels seller)
+        public void Added(SellerModels seller)
         {
             var query = @"INSERT INTO Sellers 
             VALUES (@SellerName,@Birthday,@EmailAddress,@PhoneNumber,@PresentAddress,@Username,@Bio)";
@@ -27,19 +27,20 @@ namespace SellerManagementDataService
             cmd.Parameters.AddWithValue("@PresentAddress", seller.PresentAddress);
             cmd.Parameters.AddWithValue("@Username", seller.Username);
             cmd.Parameters.AddWithValue("@Bio", seller.Bio);
-
             sqlConnection.Open();
             cmd.ExecuteNonQuery();
             sqlConnection.Close();
         }
-
         public List<SellerModels> GetAccounts()
         {
             var list = new List<SellerModels>();
+
             string query = "SELECT * FROM Sellers";
             SqlCommand cmd = new SqlCommand(query, sqlConnection);
+
             sqlConnection.Open();
             SqlDataReader reader = cmd.ExecuteReader();
+
             while (reader.Read())
             {
                 list.Add(new SellerModels
@@ -53,10 +54,38 @@ namespace SellerManagementDataService
                     Bio = reader["Bio"].ToString()
                 });
             }
+
             sqlConnection.Close();
             return list;
         }
 
+        public List<SellerModels> ViewAccounts()
+        {
+            var list = new List<SellerModels>();
+
+            string query = "SELECT * FROM Sellers";
+            SqlCommand cmd = new SqlCommand(query, sqlConnection);
+
+            sqlConnection.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                list.Add(new SellerModels
+                {
+                    SellerName = reader["SellerName"].ToString(),
+                    Birthday = reader["Birthday"].ToString(),
+                    EmailAddress = reader["EmailAddress"].ToString(),
+                    PhoneNumber = reader["PhoneNumber"].ToString(),
+                    PresentAddress = reader["PresentAddress"].ToString(),
+                    Username = reader["Username"].ToString(),
+                    Bio = reader["Bio"].ToString()
+                });
+            }
+
+            sqlConnection.Close();
+            return list;
+        }
         public SellerModels? Search(string username)
         {
             var query = "SELECT * FROM Sellers WHERE Username=@Username";

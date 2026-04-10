@@ -36,7 +36,7 @@ using SellerManagementModels;
                     Bio = "Happy Shopping!"
                 });
                 SaveDataToJsonFile();
-                db.Add(sellerAccounts[0]);
+                db.Added(sellerAccounts[0]);
             }
         }
 
@@ -66,22 +66,28 @@ using SellerManagementModels;
                 sellerAccounts.Add(seller);
                 SaveDataToJsonFile();
             }
-            db.Add(seller);
+            db.Added(seller);
         }
 
-        public List<SellerModels> GetAccounts()
+    public List<SellerModels> GetAccounts()
+    {
+        RetrieveDataFromJsonFile();
+
+        var dbList = db.GetAccounts();
+
+        foreach (var s in dbList)
         {
-            RetrieveDataFromJsonFile();
-            var dbList = db.GetAccounts();
-            foreach (var s in dbList)
+            if (!sellerAccounts.Exists(x =>
+                x.Username.Equals(s.Username, StringComparison.OrdinalIgnoreCase)))
             {
-                if (!sellerAccounts.Exists(x => x.Username.Equals(s.Username, StringComparison.OrdinalIgnoreCase)))
-                    sellerAccounts.Add(s);
+                sellerAccounts.Add(s);
             }
-            return sellerAccounts;
         }
 
-        public SellerModels? Search(string input)
+        return sellerAccounts;
+    }
+
+    public SellerModels? Search(string input)
         {
             RetrieveDataFromJsonFile();
             var seller = sellerAccounts.FirstOrDefault(x =>
@@ -128,4 +134,6 @@ using SellerManagementModels;
             }
             db.Delete(username);
         }
+
+
     }

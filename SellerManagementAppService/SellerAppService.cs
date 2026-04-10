@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SellerManagementDataService;
 using SellerManagementModels;
 
@@ -6,56 +7,63 @@ namespace SellerManagementAppService
 {
     public class SellerAppService
     {
-        private SellerJsonData jsonDataService = new SellerJsonData();
-        private SellersDBData dbDataService = new SellersDBData();
-
+        SellerDataService sellerDataService = new SellerDataService(new SellersDBData());
         public bool CreateAccount(SellerModels data)
         {
-            if (string.IsNullOrEmpty(data.SellerName))
-                return false;
+            if(data == null) return false;
+            if (string.IsNullOrWhiteSpace(data.Username)) return false;
+            if (string.IsNullOrWhiteSpace(data.SellerName)) return false;
+            if (string.IsNullOrWhiteSpace(data.EmailAddress)) return false;
+            if (string.IsNullOrWhiteSpace(data.PhoneNumber)) return false;
+            if (sellerDataService.GetAccounts().Exists(x => x.Username == data.Username))return false;
 
-            if (jsonDataService.GetAccounts().Exists(x => x.Username == data.Username))
-                return false;
-
-            jsonDataService.Add(data);
-            dbDataService.Add(data);
-
+            sellerDataService.Added(data);
             return true;
         }
 
-        public SellerModels? SearchAccount(string input)
+        public SellerModels? SearchAccount(string username)
         {
-            var seller = jsonDataService.Search(input);
-            if (seller == null)
-                seller = dbDataService.Search(input);
-
-            return seller;
+            if(string.IsNullOrWhiteSpace(username)) return null; 
+            return sellerDataService.Search(username);
         }
 
-        public void UpdateAccount(SellerModels data)
+        public bool UpdateAccount(SellerModels data)
         {
-            jsonDataService.Update(data);
-            dbDataService.Update(data);
+            if (data == null) return false;
+            if(string.IsNullOrWhiteSpace(data.Username)) return false;
+            if(string.IsNullOrWhiteSpace(data.SellerName)) return false;
+            if(string.IsNullOrWhiteSpace(data.EmailAddress)) return false;
+            if(string.IsNullOrWhiteSpace(data.PhoneNumber)) return false;
+
+            var existing = sellerDataService.Search(data.Username);
+
+            if (existing == null)
+                return false;
+
+            sellerDataService.Update(data);
+            return true;
         }
 
-        public void Delete(string username)
+        public bool DeleteAccount(string username)
         {
-            jsonDataService.Delete(username);
-            dbDataService.Delete(username);
-        }
+            if (string.IsNullOrWhiteSpace(username)) return false;
 
+            var existing = sellerDataService.Search(username);
+
+            if (existing == null)
+                return false;
+
+            sellerDataService.Delete(username);
+            return true;
+        }
         public List<SellerModels> GetAccounts()
         {
-            var list = jsonDataService.GetAccounts();
-            var dbList = dbDataService.GetAccounts();
+            return sellerDataService.GetAccounts();
+        }
 
-            foreach (var s in dbList)
-            {
-                if (!list.Exists(x => x.Username == s.Username))
-                    list.Add(s);
-            }
-
-            return list;
+         public List<SellerModels> ViewAccounts()
+        {
+            return sellerDataService.GetAccounts();
         }
     }
 }

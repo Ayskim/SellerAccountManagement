@@ -26,24 +26,22 @@ namespace SellerManagement
                     case '1':
                         createAcc();
                         break;
-
                     case '2':
                         searchAcc();
                         break;
-
                     case '3':
                         updateInfo();
                         break;
-
                     case '4':
                         deleteAcc();
                         break;
-
                     case '5':
+                        viewAcc();
+                        break;
+                    case '6':
                         Console.WriteLine("Exit.");
                         shop = false;
                         break;
-
                     default:
                         Console.WriteLine("Invalid input. Select an option.");
                         break;
@@ -54,19 +52,19 @@ namespace SellerManagement
         static void chooseNum()
         {
             Console.WriteLine("\nACCOUNT & SECURITY");
+            Console.WriteLine("Please select an option:");
+            Console.WriteLine("\n--------------------------------------------------------");
             Console.WriteLine("[1]. Create account");
             Console.WriteLine("[2]. Search account");
             Console.WriteLine("[3]. Update information");
             Console.WriteLine("[4]. Delete your account");
-            Console.WriteLine("[5]. Exit");
+            Console.WriteLine("[5]. View all accounts");
+            Console.WriteLine("[6]. Exit");
             Console.WriteLine("\n--------------------------------------------------------");
             Console.Write("Choose: ");
         }
-
         static void createAcc()
         {
-            Console.WriteLine("\nADD ACCOUNT");
-
             SellerModels acc = new SellerModels();
 
             Console.Write("Enter Seller Name: ");
@@ -107,6 +105,13 @@ namespace SellerManagement
                 service.CreateAccount(acc);
                 Console.WriteLine("\nCreated Successfully.");
                 Console.WriteLine("\n--------------------------------------------------------");
+
+                Console.Write("Do you want to add another account? (Yes/No): ");
+                string addAnother = Console.ReadLine()?.ToLower() ?? "";
+                if (addAnother == "yes")
+                {
+                    createAcc();
+                }
             }
             else
             {
@@ -117,8 +122,6 @@ namespace SellerManagement
 
         static void searchAcc()
         {
-            Console.WriteLine("\nSEARCH ACCOUNT");
-
             Console.Write("\nEnter username to search: ");
             string username = Console.ReadLine();
 
@@ -145,68 +148,136 @@ namespace SellerManagement
 
         static void updateInfo()
         {
-            Console.WriteLine("\nUPDATE INFORMATION");
+                Console.Write("\nEnter username to update: ");
+                string username = Console.ReadLine();
 
-            SellerModels acc = new SellerModels();
+                var existing = service.SearchAccount(username);
 
-            Console.Write("\nEnter Username (to update): ");
-            acc.Username = Console.ReadLine();
+                if (existing == null)
+                {
+                    Console.WriteLine("\nUsername does not exist.");
+                    Console.WriteLine("--------------------------------------------------------");
+                    return;
+                }
 
-            Console.Write("Name: ");
-            acc.SellerName = Console.ReadLine();
+                Console.WriteLine("\nAccount Found.");
+                Console.WriteLine($"Name: {existing.SellerName}");
+                Console.WriteLine($"Username: {existing.Username}");
 
-            Console.Write("Bio: ");
-            acc.Bio = Console.ReadLine();
+                Console.Write("\nDo you update this account (Yes/No): ");
+                string confirm = Console.ReadLine().ToLower();
 
-            Console.Write("Phone: ");
-            acc.PhoneNumber = Console.ReadLine();
+                if (confirm != "yes")
+                {
+                    Console.WriteLine("Update cancelled.");
+                    Console.WriteLine("\n--------------------------------------------------------");
+                    return;
+                }
 
-            Console.Write("Email: ");
-            acc.EmailAddress = Console.ReadLine();
+                SellerModels acc = new SellerModels();
 
-            Console.Write("Address: ");
-            acc.PresentAddress = Console.ReadLine();
+                acc.Username = username;
 
-            Console.Write("Birthday: ");
-            acc.Birthday = Console.ReadLine();
+                Console.Write("Name: ");
+                acc.SellerName = Console.ReadLine();
 
-            Console.Write("\nSave this info? (Yes/No): ");
-            string confirm = Console.ReadLine().ToLower();
+                Console.Write("Username: ");
+                acc.Username = Console.ReadLine();
 
-            if (confirm == "yes")
-            {
-                service.UpdateAccount(acc);
-                Console.WriteLine("\nInformation Updated Successfully.");
-                Console.WriteLine("\n--------------------------------------------------------");
+                Console.WriteLine("Birthday: ");
+                acc.Birthday = Console.ReadLine();
+
+                Console.Write("Email: ");
+                acc.EmailAddress = Console.ReadLine();
+
+                Console.Write("Phone: ");
+                acc.PhoneNumber = Console.ReadLine();
+
+                Console.Write("Address: ");
+                acc.PresentAddress = Console.ReadLine();
+
+                Console.Write("Bio: ");
+                acc.Bio = Console.ReadLine();
+
+                Console.Write("\nSave this info? (Yes/No): ");
+                string saveConfirm = Console.ReadLine().ToLower();
+
+                if (saveConfirm == "yes")
+                {
+                    service.UpdateAccount(acc);
+                    Console.WriteLine("\nInformation Updated Successfully.");
+                    Console.WriteLine("\n--------------------------------------------------------");
+                }
+                else
+                {
+                    Console.WriteLine("Update cancelled.");
+                    Console.WriteLine("\n--------------------------------------------------------");
+                }
             }
-            else
-            {
-                Console.WriteLine("Update cancelled.");
-                Console.WriteLine("\n--------------------------------------------------------");
-            }
-        }
 
-        static void deleteAcc()
+            static void deleteAcc()
         {
-            Console.WriteLine("\nREQUEST ACCOUNT DELETION");
-
             Console.Write("Enter Username to delete: ");
             string username = Console.ReadLine();
 
-            Console.Write("Are you sure? (Yes/No): ");
+            var existing = service.SearchAccount(username);
+
+            if(existing == null)
+            {
+                Console.WriteLine("\nUsername does not exist.");
+                Console.WriteLine("--------------------------------------------------------");
+                return;
+            }
+
+            Console.WriteLine("\nAccount Found.");
+            Console.WriteLine($"Name: {existing.SellerName}");
+            Console.WriteLine($"Username: {existing.Username}");
+
+            Console.Write("\nAre you sure you want to delete this account? (Yes/No): ");
             string ans = Console.ReadLine().ToLower();
 
             if (ans == "yes")
             {
-                service.Delete(username);
-                Console.WriteLine("\nDELETED SUCCESSFULLY");
-                Console.WriteLine("\n--------------------------------------------------------");
+                bool result = service.DeleteAccount(username);
+
+                if (result)
+                {
+                    Console.WriteLine("\nAccount has been deleted.");
+                }
+                else
+                {
+                    Console.WriteLine("\nFailed to delete account.");
+                }
             }
             else
             {
-                Console.WriteLine("\nCancelled Account Deletion");
+                Console.WriteLine("Deletion cancelled.");
+            }
                 Console.WriteLine("\n--------------------------------------------------------");
+        }
+
+        static void viewAcc()
+        {
+            var accounts = service.GetAccounts();
+
+            if (accounts == null || accounts.Count == 0)
+            {
+                Console.WriteLine("\nNo accounts found.");
+                Console.WriteLine("\n--------------------------------------------------------");
+                return;
+            }
+
+            Console.WriteLine("\nALL ACCOUNTS:");
+            Console.WriteLine("--------------------------------------------------------");
+
+            foreach (var acc in accounts)
+            {
+                Console.WriteLine($"Name: {acc.SellerName}");
+                Console.WriteLine($"Username: {acc.Username}");
+                Console.WriteLine($"Email: {acc.EmailAddress}");
+                Console.WriteLine($"Phone: {acc.PhoneNumber}");
+                Console.WriteLine("--------------------------------------------------------");
             }
         }
+        }
     }
-}
