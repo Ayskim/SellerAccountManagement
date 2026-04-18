@@ -24,11 +24,13 @@ namespace SellerManagementDataService
             return sellerAccounts.Find(s => s.Username == username);
         }
 
-        public void Update(SellerModels seller)
+        public void Update(string originalUsername, SellerModels seller)
         {
-            var existingSeller = sellerAccounts.Find(s => s.Username == seller.Username);
+            var existingSeller = sellerAccounts.Find(s => s.Username == originalUsername);
+
             if (existingSeller != null)
             {
+                existingSeller.Username = seller.Username;
                 existingSeller.SellerName = seller.SellerName;
                 existingSeller.Birthday = seller.Birthday;
                 existingSeller.EmailAddress = seller.EmailAddress;

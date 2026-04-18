@@ -9,7 +9,7 @@ namespace SellerManagementDataService
     {
         void Added(SellerModels seller);
         SellerModels? Search(string username);
-        void Update(SellerModels seller);
+        void Update(string originalUsername, SellerModels seller);
         void Delete(string username);
         List<SellerModels> GetAccounts();
         List<SellerModels> ViewAccounts();

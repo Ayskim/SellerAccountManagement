@@ -26,9 +26,10 @@ namespace SellerManagementDataService
             return _dataService.Search(username);
         }
 
-        public void Update(SellerModels seller)
+        public bool Update(string originalUsername, SellerModels seller)
         {
-            _dataService.Update(seller);
+            _dataService.Update(originalUsername, seller);
+            return true;
         }
 
         public void Delete(string username)

@@ -111,24 +111,29 @@ namespace SellerManagementDataService
             return seller;
         }
 
-        public void Update(SellerModels seller)
+        public void Update(string originalUsername, SellerModels seller)
         {
             var query = @"UPDATE Sellers SET 
-            SellerName=@SellerName,
-            Birthday=@Birthday,
-            EmailAddress=@EmailAddress,
-            PhoneNumber=@PhoneNumber,
-            PresentAddress=@PresentAddress,
-            Bio=@Bio
-            WHERE Username=@Username";
+                SellerName=@SellerName,
+                Birthday=@Birthday,
+                EmailAddress=@EmailAddress,
+                PhoneNumber=@PhoneNumber,
+                PresentAddress=@PresentAddress,
+                Bio=@Bio,
+                Username=@NewUsername
+                WHERE Username=@OriginalUsername";
+
             SqlCommand cmd = new SqlCommand(query, sqlConnection);
+
             cmd.Parameters.AddWithValue("@SellerName", seller.SellerName);
             cmd.Parameters.AddWithValue("@Birthday", seller.Birthday);
             cmd.Parameters.AddWithValue("@EmailAddress", seller.EmailAddress);
             cmd.Parameters.AddWithValue("@PhoneNumber", seller.PhoneNumber);
             cmd.Parameters.AddWithValue("@PresentAddress", seller.PresentAddress);
             cmd.Parameters.AddWithValue("@Bio", seller.Bio);
-            cmd.Parameters.AddWithValue("@Username", seller.Username);
+
+            cmd.Parameters.AddWithValue("@NewUsername", seller.Username);
+            cmd.Parameters.AddWithValue("@OriginalUsername", originalUsername);
 
             sqlConnection.Open();
             cmd.ExecuteNonQuery();

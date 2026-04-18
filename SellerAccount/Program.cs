@@ -160,6 +160,8 @@ namespace SellerManagement
                 return;
             }
 
+            string originalUsername = username;
+
             Console.WriteLine("\nAccount Found.");
             Console.WriteLine($"Name: {existing.SellerName}");
             Console.WriteLine($"Username: {existing.Username}");
@@ -175,8 +177,6 @@ namespace SellerManagement
             }
 
             SellerModels acc = new SellerModels();
-
-            acc.Username = username;
 
             Console.Write("Name: ");
             acc.SellerName = Console.ReadLine();
@@ -204,8 +204,13 @@ namespace SellerManagement
 
             if (saveConfirm == "yes")
             {
-                service.UpdateAccount(acc);
-                Console.WriteLine("\nInformation Updated Successfully.");
+                bool v = service.UpdateAccount(originalUsername, acc);
+
+                if (v)
+                    Console.WriteLine("\nInformation Updated Successfully.");
+                else
+                    Console.WriteLine("\nUpdate failed. Account not found.");
+
                 Console.WriteLine("\n--------------------------------------------------------");
             }
             else
@@ -214,7 +219,6 @@ namespace SellerManagement
                 Console.WriteLine("\n--------------------------------------------------------");
             }
         }
-
         static void deleteAcc()
         {
             Console.Write("Enter Username to delete: ");
