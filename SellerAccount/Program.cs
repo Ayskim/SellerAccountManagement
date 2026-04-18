@@ -148,81 +148,81 @@ namespace SellerManagement
 
         static void updateInfo()
         {
-                Console.Write("\nEnter username to update: ");
-                string username = Console.ReadLine();
+            Console.Write("\nEnter username to update: ");
+            string username = Console.ReadLine();
 
-                var existing = service.SearchAccount(username);
+            var existing = service.SearchAccount(username);
 
-                if (existing == null)
-                {
-                    Console.WriteLine("\nUsername does not exist.");
-                    Console.WriteLine("--------------------------------------------------------");
-                    return;
-                }
-
-                Console.WriteLine("\nAccount Found.");
-                Console.WriteLine($"Name: {existing.SellerName}");
-                Console.WriteLine($"Username: {existing.Username}");
-
-                Console.Write("\nDo you update this account (Yes/No): ");
-                string confirm = Console.ReadLine().ToLower();
-
-                if (confirm != "yes")
-                {
-                    Console.WriteLine("Update cancelled.");
-                    Console.WriteLine("\n--------------------------------------------------------");
-                    return;
-                }
-
-                SellerModels acc = new SellerModels();
-
-                acc.Username = username;
-
-                Console.Write("Name: ");
-                acc.SellerName = Console.ReadLine();
-
-                Console.Write("Username: ");
-                acc.Username = Console.ReadLine();
-
-                Console.WriteLine("Birthday: ");
-                acc.Birthday = Console.ReadLine();
-
-                Console.Write("Email: ");
-                acc.EmailAddress = Console.ReadLine();
-
-                Console.Write("Phone: ");
-                acc.PhoneNumber = Console.ReadLine();
-
-                Console.Write("Address: ");
-                acc.PresentAddress = Console.ReadLine();
-
-                Console.Write("Bio: ");
-                acc.Bio = Console.ReadLine();
-
-                Console.Write("\nSave this info? (Yes/No): ");
-                string saveConfirm = Console.ReadLine().ToLower();
-
-                if (saveConfirm == "yes")
-                {
-                    service.UpdateAccount(acc);
-                    Console.WriteLine("\nInformation Updated Successfully.");
-                    Console.WriteLine("\n--------------------------------------------------------");
-                }
-                else
-                {
-                    Console.WriteLine("Update cancelled.");
-                    Console.WriteLine("\n--------------------------------------------------------");
-                }
+            if (existing == null)
+            {
+                Console.WriteLine("\nUsername does not exist.");
+                Console.WriteLine("--------------------------------------------------------");
+                return;
             }
 
-            static void deleteAcc()
+            Console.WriteLine("\nAccount Found.");
+            Console.WriteLine($"Name: {existing.SellerName}");
+            Console.WriteLine($"Username: {existing.Username}");
+
+            Console.Write("\nDo you update this account (Yes/No): ");
+            string confirm = Console.ReadLine().ToLower();
+
+            if (confirm != "yes")
+            {
+                Console.WriteLine("Update cancelled.");
+                Console.WriteLine("\n--------------------------------------------------------");
+                return;
+            }
+
+            SellerModels acc = new SellerModels();
+
+            acc.Username = username;
+
+            Console.Write("Name: ");
+            acc.SellerName = Console.ReadLine();
+
+            Console.Write("Username: ");
+            acc.Username = Console.ReadLine();
+
+            Console.WriteLine("Birthday: ");
+            acc.Birthday = Console.ReadLine();
+
+            Console.Write("Email: ");
+            acc.EmailAddress = Console.ReadLine();
+
+            Console.Write("Phone: ");
+            acc.PhoneNumber = Console.ReadLine();
+
+            Console.Write("Address: ");
+            acc.PresentAddress = Console.ReadLine();
+
+            Console.Write("Bio: ");
+            acc.Bio = Console.ReadLine();
+
+            Console.Write("\nSave this info? (Yes/No): ");
+            string saveConfirm = Console.ReadLine().ToLower();
+
+            if (saveConfirm == "yes")
+            {
+                service.UpdateAccount(acc);
+                Console.WriteLine("\nInformation Updated Successfully.");
+                Console.WriteLine("\n--------------------------------------------------------");
+            }
+            else
+            {
+                Console.WriteLine("Update cancelled.");
+                Console.WriteLine("\n--------------------------------------------------------");
+            }
+        }
+
+        static void deleteAcc()
         {
             Console.Write("Enter Username to delete: ");
             string username = Console.ReadLine();
 
             var existing = service.SearchAccount(username);
 
-            if(existing == null)
+            if (existing == null)
             {
                 Console.WriteLine("\nUsername does not exist.");
                 Console.WriteLine("--------------------------------------------------------");
@@ -253,7 +253,7 @@ namespace SellerManagement
             {
                 Console.WriteLine("Deletion cancelled.");
             }
-                Console.WriteLine("\n--------------------------------------------------------");
+            Console.WriteLine("\n--------------------------------------------------------");
         }
 
         static void viewAcc()
@@ -277,5 +277,5 @@ namespace SellerManagement
                 Console.WriteLine("--------------------------------------------------------");
             }
         }
-        }
     }
+}
